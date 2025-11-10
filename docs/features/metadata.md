@@ -229,16 +229,25 @@ src/
 │   └── home.metadata.ts  ← Page metadata
 ```
 
-**Layout metadata:**
+**Define metadata in the controller:**
 
 ```typescript
-// app.metadata.ts
-export const metadata = {
-  title: "My App",
-  description: "Default description",
-  author: "Your Name",
-};
+// Controller returns metadata
+@Get()
+@Page('home')
+getHome(): PageResponse {
+  return {
+    data: {},
+    metadata: {
+      title: "Home Page",
+      description: "Welcome home",
+      author: "Your Name",
+    }
+  };
+}
 ```
+
+**Layout receives metadata from controller:**
 
 ```tsx
 // app.layout.tsx
@@ -271,15 +280,7 @@ export default function AppLayout({
 }
 ```
 
-**Page metadata:**
-
-```typescript
-// pages/home.metadata.ts
-export const metadata = {
-  title: "Home Page",
-  description: "Welcome home",
-};
-```
+**Page component receives data:**
 
 ```tsx
 // pages/home.page.tsx

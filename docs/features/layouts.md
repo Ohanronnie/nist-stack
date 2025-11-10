@@ -179,15 +179,21 @@ The final HTML structure:
 
 ## Default Metadata in Layouts
 
-Use a companion `*.metadata.ts` file to define default metadata:
+Metadata is defined in the controller's `PageResponse`:
 
 ```typescript
-// app.metadata.ts
-export const metadata = {
-  title: "My App",
-  description: "Default description",
-  author: "Your Name",
-};
+// Controller
+@Get()
+@Page('home')
+getHome(): PageResponse {
+  return {
+    data: {},
+    metadata: {
+      title: "My App",
+      description: "Default description",
+    }
+  };
+}
 ```
 
 ```tsx

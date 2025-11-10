@@ -32,15 +32,22 @@ export default function NotFound() {
 
 ## Adding Metadata
 
-Create a companion `not-found.metadata.ts` file to customize SEO tags:
+NIST automatically returns appropriate 404 metadata. You can customize it by creating a catch-all route:
 
 ```typescript
-// src/not-found.metadata.ts
-export const metadata = {
-  title: "404 - Page Not Found",
-  description: "This page doesn't exist.",
-  robots: "noindex, nofollow",
-};
+// Handle 404s in your controller
+@Get('*')
+@Page('not-found')
+notFound(): PageResponse {
+  return {
+    data: {},
+    metadata: {
+      title: "404 - Page Not Found",
+      description: "This page doesn't exist.",
+      robots: "noindex, nofollow",
+    }
+  };
+}
 ```
 
 ## Complete Example

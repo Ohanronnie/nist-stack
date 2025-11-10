@@ -195,16 +195,10 @@ import type {
 
 ## Examples
 
-### Page with Metadata
+### Simple Page
 
 ```typescript
 // my-page.page.tsx
-export const metadata = {
-  title: "My Page",
-  description: "Page description",
-  keywords: "nist, ssr, react",
-};
-
 export default function MyPage() {
   return <div>Hello World</div>;
 }
@@ -225,10 +219,6 @@ export default function UserPage() {
 
 ```typescript
 // app.layout.tsx
-export const metadata = {
-  title: "My App",
-};
-
 export default function Layout({ children }) {
   return (
     <div>
