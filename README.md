@@ -1,7 +1,7 @@
 <div align="center">
-  <h1>🚀 NIST Stack</h1>
+  <h1>NIST Stack</h1>
   <p><strong>NestJS + Vite SSR for React</strong></p>
-  <p>Enterprise-grade backend meets lightning-fast frontend • Sub-20ms SSR • Full type safety</p>
+  <p>A modern full-stack framework combining enterprise-grade backend architecture with lightning-fast frontend tooling</p>
 
   <p>
     <a href="https://www.npmjs.com/package/nist-stack"><img src="https://img.shields.io/npm/v/nist-stack.svg" alt="npm version"></a>
@@ -11,62 +11,47 @@
   </p>
 
   <p>
-    <a href="#-quick-start">Quick Start</a> •
-    <a href="#-core-features">Features</a> •
-    <a href="#-documentation">Documentation</a> •
-    <a href="#-why-nist">Why NIST</a> •
-    <a href="#-community">Community</a>
+    <a href="#quick-start">Quick Start</a> •
+    <a href="#features">Features</a> •
+    <a href="#documentation">Documentation</a> •
+    <a href="#examples">Examples</a> •
+    <a href="#community">Community</a>
   </p>
 </div>
 
 ---
 
-## 🎯 Why NIST?
+## Why NIST?
 
 NIST combines **NestJS's powerful backend architecture** with **Vite's lightning-fast development experience** to deliver server-side rendered React applications with unprecedented performance and developer experience.
 
-### The Power of Integration
-
 ```typescript
-// 1. Define your page in a NestJS controller
-@Controller()
-@PageRoot(__dirname)
-export class AppController {
-  constructor(private readonly userService: UserService) {}
-
-  @Get()
-  @Page("home")
-  async getHome(): Promise<PageResponse> {
-    const users = await this.userService.findAll();
-    return {
-      data: { users },
-      metadata: { title: "Home", description: "Welcome!" },
-    };
-  }
+// Define your page in a NestJS controller
+@Get()
+@Page("home")
+getHome(): PageResponse {
+  return { data: { users: ["Alice", "Bob"] } };
 }
 ```
 
 ```tsx
-// 2. Render with React - props are fully typed!
+// Render with React - props are fully typed!
 export default function Home({ users }) {
   return (
-    <div>
-      <h1>Users</h1>
-      <ul>
-        {users.map((u) => (
-          <li key={u.id}>{u.name}</li>
-        ))}
-      </ul>
-    </div>
+    <ul>
+      {users.map((u) => (
+        <li key={u}>{u}</li>
+      ))}
+    </ul>
   );
 }
 ```
 
-**Result:** Sub-20ms SSR, full type safety from DB to UI, instant HMR, and zero configuration.
+**Result:** Sub-20ms SSR, full type safety, and instant HMR. No configuration needed.
 
 ---
 
-## 📊 Framework Comparison
+## At a Glance
 
 | Feature                  | NIST             | Next.js              | Remix             |
 | ------------------------ | ---------------- | -------------------- | ----------------- |
@@ -77,37 +62,41 @@ export default function Home({ users }) {
 | **Guards & Auth**        | ✅ NestJS guards | ⚠️ Custom middleware | ⚠️ Custom loaders |
 | **Build Tool**           | Vite 7           | Turbopack            | esbuild           |
 | **Hot Reload**           | ✅ Instant HMR   | ✅ Fast Refresh      | ✅ Live reload    |
-| **Enterprise Ready**     | ✅ Yes           | ⚠️ Partial           | ⚠️ Partial        |
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
-### 1. Install NIST
+### Installation
 
 ```bash
-npm install nist-stack react react-dom vite
+npm install nist-stack
 ```
 
-### 2. Setup Your Server (`main.ts`)
+That's it! One package gives you everything.
+
+### 1. Server Setup (main.ts)
 
 ```typescript
 import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
-import { bootstrapNist } from "nist-stack";
+import { createViteDevServer, NistInterceptor } from "nist-stack";
+import { Reflector } from "@nestjs/core";
 
 async function bootstrap() {
+  const vite = await createViteDevServer();
   const app = await NestFactory.create(AppModule);
 
-  // One line to setup SSR + Vite + all NIST features
-  await bootstrapNist(app);
+  app.use(vite.dev.middlewares);
+
+  const reflector = app.get(Reflector);
+  app.useGlobalInterceptors(new NistInterceptor(reflector, vite));
 
   await app.listen(3000);
 }
 bootstrap();
 ```
 
-### 3. Create a Page Controller
+### 2. Create a Controller with Pages
 
 ```typescript
 import { Controller, Get } from "@nestjs/common";
@@ -116,29 +105,26 @@ import { Page, PageRoot } from "nist-stack";
 @Controller()
 @PageRoot(__dirname)
 export class AppController {
-  @Get()
-  @Page("home")
+  @Get("/")
+  @Page("app")
   home() {
-    return {
-      data: { users: ["Alice", "Bob"] },
-      metadata: { title: "Home" },
-    };
+    return { users: ["Alice", "Bob"] };
   }
 }
 ```
 
-### 4. Create Your React Page (e.g., `src/home.page.tsx`)
+### 3. Create a React Page (src/pages/app.page.tsx)
 
-```tsx
+```typescript
 import { Link } from "nist-stack/client";
 
-export default function Home({ users }) {
+export default function App({ users }) {
   return (
     <div>
-      <h1>Welcome!</h1>
+      <h1>Users</h1>
       <ul>
-        {users.map((user) => (
-          <li key={user}>{user}</li>
+        {users.map((u) => (
+          <li key={u}>{u}</li>
         ))}
       </ul>
       <Link href="/about">About</Link>
@@ -147,188 +133,95 @@ export default function Home({ users }) {
 }
 ```
 
-> **Note:** Pages are resolved relative to `__dirname` of the controller with `@PageRoot(__dirname)`. If your controller is in `src/app.controller.ts`, place `home.page.tsx` in the same `src/` directory.
+## Available Imports
 
-### 5. Run Your App
-
-```bash
-npm run start:dev
-```
-
-Visit `http://localhost:3000` - that's it! 🎉
-
----
-
-## 🎨 Core Features
-
-### ⚡ Lightning-Fast SSR
-
-- **19ms response times** with intelligent caching
-- Vite's instant HMR for immediate feedback
-- Parallel data loading and optimized builds
-
-### 🏗️ Enterprise Architecture
-
-- **Full NestJS integration** - DI, modules, guards, interceptors
-- **Type-safe end-to-end** - From database to UI
-- **Modular design** for scalable applications
-
-### 🔐 Built-in Authentication
-
-- NestJS guard system with server-side redirects
-- Session management and flexible authorization
-- `RedirectException` for seamless auth flows
-
-### 📄 Dynamic SEO & Metadata
-
-- Controller-based metadata generation
-- OpenGraph and Twitter Card support
-- Server-rendered meta tags for perfect SEO
-
-### 🎯 Developer Experience
-
-- **Zero configuration** - Sensible defaults out of the box
-- **Decorator-based routing** - No config files needed
-- **Full TypeScript** with complete type inference
-- **Instant HMR** - See changes immediately
-
-### 🚀 Production Ready
-
-- Optimized builds with code splitting
-- HTTP/2 support and caching strategies
-- Health checks and monitoring integration
-- Comprehensive deployment guides
-
----
-
-## 📦 What's Included
-
-### Server-Side (`nist-stack`)
+### Server-Side
 
 ```typescript
+// From 'nist-stack'
 import {
-  // Decorators
-  Page, // Mark controller method as SSR page
-  PageRoot, // Set pages directory root
-  Layout, // Assign custom layout
-
-  // Core
-  bootstrapNist, // One-line setup for SSR + Vite
-  createViteDevServer, // Manual Vite server creation
-  NistInterceptor, // SSR rendering interceptor
-
-  // Exceptions & Filters
-  RedirectException, // Server-side redirects
-  RedirectExceptionFilter,
-
-  // Utilities
+  Page, // Decorator: Mark controller method as page
+  PageRoot, // Decorator: Set page root directory
+  Layout, // Decorator: Set custom layout
+  NistInterceptor, // SSR interceptor
+  createViteDevServer, // Create Vite server
   NistError, // Framework error class
 } from "nist-stack";
+
+// From 'nist-stack/decorators' (alternative)
+import { Page, PageRoot, Layout } from "nist-stack/decorators";
 ```
 
-### Client-Side (`nist-stack/client`)
+### Client-Side
 
 ```typescript
+// From 'nist-stack/client'
 import {
-  // Components
-  Link, // Client-side navigation
-  Image, // Optimized images
-  ErrorBoundary, // Error boundaries
-  Router, // Root router
-
-  // Hooks
-  useRouter, // Router instance
-  useParams, // Route parameters
-  useQuery, // Query string
-  usePathname, // Current path
-  useParam, // Single param
-  useQueryParam, // Single query param
-  useRouteData, // All route data
-  useNistData, // Full hydration data
+  Link, // Client-side navigation component
+  Image, // Optimized image component
+  ErrorBoundary, // Error boundary component
+  Router, // Router component
+  useRouter, // Router hook
+  useParams, // Get route params
+  useQuery, // Get query params
+  usePathname, // Get current pathname
+  useParam, // Get single param
+  useQueryParam, // Get single query param
+  useRouteData, // Get all route data
+  useNistData, // Get full hydration data
 } from "nist-stack/client";
 
-// Types
+// TypeScript types
 import type {
-  PageResponse, // Controller return type
-  PageMetadata, // Metadata interface
-  LayoutProps, // Layout props
+  Metadata, // Page/layout metadata
+  LayoutProps, // Layout component props
   PageProps, // Page component props
+  PageConfig, // Page configuration (ISR, etc.)
+  RouteData, // Route data interface
 } from "nist-stack/client";
 ```
 
----
+## Features
 
-## 💡 Real-World Examples
+- ✅ Server-Side Rendering (SSR)
+- ✅ Hot Module Replacement (HMR)
+- ✅ Type-safe routing with decorators
+- ✅ Automatic page validation
+- ✅ Built-in security (CSRF, XSS protection)
+- ✅ Production-ready builds
+- ✅ Client-side navigation
+- ✅ SEO metadata support
+- ✅ ISR support (Incremental Static Regeneration)
 
-<details>
-<summary><strong>🔐 Authentication with Guards</strong></summary>
+## Examples
+
+### Page with Metadata
 
 ```typescript
-// auth.guard.ts
-@Injectable()
-export class AuthGuard implements CanActivate {
-  canActivate(context: ExecutionContext): boolean {
-    const request = context.switchToHttp().getRequest();
-    if (!request.user) {
-      throw new RedirectException("/login");
-    }
-    return true;
-  }
-}
+// my-page.page.tsx
+export const metadata = {
+  title: "My Page",
+  description: "Page description",
+  keywords: "nist, ssr, react",
+};
 
-// dashboard.controller.ts
-@Controller("dashboard")
-@PageRoot(__dirname)
-export class DashboardController {
-  @Get()
-  @Page("dashboard")
-  @UseGuards(AuthGuard)
-  getDashboard(@Req() req) {
-    return {
-      data: { user: req.user },
-      metadata: { title: "Dashboard" },
-    };
-  }
+export default function MyPage() {
+  return <div>Hello World</div>;
 }
 ```
 
-</details>
-
-<details>
-<summary><strong>📄 Dynamic Metadata & SEO</strong></summary>
+### Using Route Params
 
 ```typescript
-// blog.controller.ts
-@Controller("blog")
-@PageRoot(__dirname)
-export class BlogController {
-  constructor(private readonly blogService: BlogService) {}
+import { useParams } from "nist-stack/client";
 
-  @Get(":slug")
-  @Page("blog-post")
-  async getPost(@Param("slug") slug: string): Promise<PageResponse> {
-    const post = await this.blogService.findBySlug(slug);
-
-    return {
-      data: { post },
-      metadata: {
-        title: post.title,
-        description: post.excerpt,
-        openGraph: {
-          title: post.title,
-          description: post.excerpt,
-          image: post.coverImage,
-        },
-      },
-    };
-  }
+export default function UserPage() {
+  const { id } = useParams<{ id: string }>();
+  return <div>User ID: {id}</div>;
 }
 ```
 
-</details>
-
-<details>
-<summary><strong>🎨 Layouts & Nested Routes</strong></summary>
+### Custom Layout
 
 ```typescript
 // app.layout.tsx
@@ -336,215 +229,155 @@ export const metadata = {
   title: "My App",
 };
 
-export default function AppLayout({ children }) {
+export default function Layout({ children }) {
   return (
     <div>
-      <nav>
-        <Link href="/">Home</Link>
-        <Link href="/about">About</Link>
-      </nav>
-      <main>{children}</main>
-      <footer>© 2025</footer>
+      <nav>Navigation</nav>
+      {children}
     </div>
   );
 }
-
-// Controller using layout
-@Get('/about')
-@Page('about')
-@Layout('app')  // Uses app.layout.tsx
-getAbout() {
-  return { data: { company: "ACME Inc" } };
-}
 ```
 
-</details>
-
-<details>
-<summary><strong>🔄 Data Fetching with Services</strong></summary>
+### Controller with Layout
 
 ```typescript
+import { Controller, Get } from "@nestjs/common";
+import { Page, PageRoot, Layout } from "nist-stack";
+
 @Controller()
 @PageRoot(__dirname)
-export class HomeController {
-  constructor(
-    private readonly userService: UserService,
-    private readonly postService: PostService
-  ) {}
-
-  @Get()
-  @Page("home")
-  async getHome(): Promise<PageResponse> {
-    // Parallel data fetching
-    const [users, posts] = await Promise.all([
-      this.userService.findAll(),
-      this.postService.getLatest(10),
-    ]);
-
-    return {
-      data: { users, posts },
-      metadata: { title: "Home" },
-    };
+export class AppController {
+  @Get("/profile")
+  @Page("profile")
+  @Layout("app") // Use app.layout.tsx
+  profile() {
+    return { user: { name: "Alice" } };
   }
 }
 ```
 
-</details>
+## Development
 
----
+The framework is optimized for hot reloading:
 
-## 🛠️ Development & Production
+- **Frontend changes** → Vite HMR (instant updates, no page reload)
+- **Backend changes** → NestJS restarts (Vite HMR preserved)
 
-### Development Mode
+Run with your preferred NestJS dev tool:
 
 ```bash
-# Start with hot reload
-npm run start:dev
+# Using ts-node-dev
+ts-node-dev --respawn --transpile-only src/main.ts
 
-# Or use NestJS CLI
+# Using nodemon
+nodemon --watch src -e ts --exec ts-node src/main.ts
+
+# Using NestJS CLI
 nest start --watch
 ```
 
-**What you get:**
+The Vite dev server persists across NestJS restarts, so frontend HMR is never interrupted.
 
-- ⚡ **Instant HMR** - Frontend changes reflect immediately
-- 🔄 **Auto-restart** - Backend changes trigger server restart
-- 🎯 **Preserved HMR** - Vite state persists across NestJS restarts
-
-### Production Build
+## Production Build
 
 ```bash
-# Build client and server
+# Build everything
 npm run build
 
 # Start production server
-NODE_ENV=production npm run start:prod
+npm run start:prod
 ```
 
-**Optimizations:**
+The framework automatically switches between dev (HMR) and production (static bundles) based on `NODE_ENV`.
 
-- 📦 Code splitting and tree shaking
-- 🗜️ Minification and compression
-- 🚀 Static asset caching (1 year)
-- ⚡ HTTP/2 support
+## TypeScript
 
----
+Full TypeScript support out of the box. All exports are typed.
 
-## 🎯 Who Should Use NIST?
+## License
 
-### ✅ Perfect For
+MIT
 
-- 🏢 **Enterprise Applications** - Need robust backend architecture with DI
-- 🔐 **Auth-Heavy Apps** - Complex permission systems and role management
-- 📊 **Data-Intensive Apps** - Significant server-side business logic
-- 🚀 **Performance-Critical** - Sub-20ms SSR response times required
-- 🧩 **Microservices** - Want consistent frontend across services
-- 🔧 **Existing NestJS Apps** - Add SSR to your current backend
+## Who Should Use NIST?
 
----
+**Perfect for:**
 
-## 📚 Documentation
+- 🏢 **Enterprise applications** requiring robust backend architecture
+- 🔐 **Auth-heavy applications** with complex permission systems
+- 📊 **Data-intensive apps** with significant server-side logic
+- 🚀 **Performance-critical** applications needing fast SSR
+- 🧩 **Microservices** architectures wanting consistent frontend
 
-📖 **[Read the full documentation on GitHub →](https://github.com/ohanronnie/nist-stack/tree/main/docs)**
+**Consider alternatives if:**
 
-### 🚀 Getting Started
-
-- **[Installation Guide](https://github.com/ohanronnie/nist-stack/blob/main/docs/guide/installation.md)** - Setup NIST in minutes
-- **[Getting Started](https://github.com/ohanronnie/nist-stack/blob/main/docs/guide/getting-started.md)** - Your first NIST app
-- **[Project Structure](https://github.com/ohanronnie/nist-stack/blob/main/docs/guide/project-structure.md)** - Understand the layout
-- **[Configuration](https://github.com/ohanronnie/nist-stack/blob/main/docs/guide/configuration.md)** - Customize your setup
-
-### 📖 Core Concepts
-
-- **[Pages](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/pages.md)** - Creating and rendering pages
-- **[Layouts](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/layouts.md)** - Shared layouts and nesting
-- **[Data Fetching](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/data-fetching.md)** - Server-side data loading
-- **[Client-Side Features](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/client-side.md)** - Navigation, hooks, and components
-- **[Metadata & SEO](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/metadata.md)** - Dynamic meta tags
-- **[Guards & Auth](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/guards.md)** - Authentication patterns
-- **[Error Handling](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/error-handling.md)** - Graceful error management
-- **[Request Context](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/request-context.md)** - Accessing request data
-
-### 🔧 Advanced Topics
-
-- **[Existing Project Integration](https://github.com/ohanronnie/nist-stack/blob/main/docs/advanced/existing-project.md)** - Add NIST to your NestJS app
-- **[Deployment](https://github.com/ohanronnie/nist-stack/blob/main/docs/advanced/deployment.md)** - Production deployment guide
-- **[Performance](https://github.com/ohanronnie/nist-stack/blob/main/docs/advanced/performance.md)** - Optimization techniques
-- **[Testing](https://github.com/ohanronnie/nist-stack/blob/main/docs/advanced/testing.md)** - Unit and E2E testing
-- **[Monitoring](https://github.com/ohanronnie/nist-stack/blob/main/docs/advanced/monitoring.md)** - Health checks and metrics
-
-### 📋 Reference
-
-- **[API - Decorators](https://github.com/ohanronnie/nist-stack/blob/main/docs/api/decorators.md)** - Complete decorator reference
-- **[API - Types](https://github.com/ohanronnie/nist-stack/blob/main/docs/api/types.md)** - TypeScript type definitions
-- **[FAQ](https://github.com/ohanronnie/nist-stack/blob/main/docs/guide/faq.md)** - Frequently asked questions
-- **[Troubleshooting](https://github.com/ohanronnie/nist-stack/blob/main/docs/guide/troubleshooting.md)** - Common issues and solutions
+- You only need static site generation (use Astro, VitePress)
+- You want edge-first rendering (use Next.js with Vercel Edge)
+- You're building a simple blog (use WordPress, Ghost)
 
 ---
 
-## 👥 Community & Support
+## Documentation
 
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/ohanronnie/nist-stack/discussions">
-        <br>💬<br>
-        <strong>Discussions</strong>
-        <br><sub>Ask questions & share ideas</sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/ohanronnie/nist-stack/issues">
-        <br>🐛<br>
-        <strong>Issue Tracker</strong>
-        <br><sub>Report bugs & request features</sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/ohanronnie/nist-stack/blob/main/CONTRIBUTING.md">
-        <br>🤝<br>
-        <strong>Contributing</strong>
-        <br><sub>Help improve NIST</sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/ohanronnie/nist-stack/blob/main/SECURITY.md">
-        <br>🛡️<br>
-        <strong>Security</strong>
-        <br><sub>Report vulnerabilities</sub>
-      </a>
-    </td>
-  </tr>
-</table>
+- 📚 [Full Documentation](https://github.com/ohanronnie/nist-stack/tree/main/docs)
+- 🚀 [Getting Started Guide](./docs/guide/getting-started.md)
+- 📖 [API Reference](./docs/api/decorators.md)
+- 🎯 [Examples](./docs/examples)
+- 🔧 [Configuration](./docs/guide/configuration.md)
+- 🚢 [Deployment Guide](./docs/advanced/deployment.md)
 
 ---
 
-## 📜 License
+## Community & Support
 
-MIT © NIST Stack
-
-See [LICENSE](https://github.com/ohanronnie/nist-stack/blob/main/LICENSE) for details.
+- 💬 [GitHub Discussions](https://github.com/ohanronnie/nist-stack/discussions) - Ask questions and share ideas
+- 🐛 [Issue Tracker](https://github.com/ohanronnie/nist-stack/issues) - Report bugs and request features
+- 📧 [Email Support](mailto:support@nist-stack.dev) - For private inquiries
+- 💼 [Enterprise Support](https://github.com/ohanronnie/nist-stack#enterprise) - Professional support options
 
 ---
 
-## 🙏 Acknowledgments
+## Contributing
 
-NIST is built on the shoulders of giants:
+We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
 
-- **[NestJS](https://nestjs.com/)** - Progressive Node.js framework
-- **[Vite](https://vitejs.dev/)** - Next generation frontend tooling
-- **[React](https://react.dev/)** - Library for building user interfaces
+- 🐛 [Report a bug](https://github.com/ohanronnie/nist-stack/issues/new?template=bug_report.md)
+- ✨ [Request a feature](https://github.com/ohanronnie/nist-stack/issues/new?template=feature_request.md)
+- 📖 [Improve documentation](https://github.com/ohanronnie/nist-stack/tree/main/docs)
 
-Special thanks to all our [contributors](https://github.com/ohanronnie/nist-stack/graphs/contributors)!
+---
+
+## Security
+
+Found a security vulnerability? Please review our [Security Policy](./SECURITY.md) and report it responsibly.
+
+---
+
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for release notes and version history.
+
+---
+
+## License
+
+MIT © [Your Name]
+
+See [LICENSE](./LICENSE) for details.
+
+---
+
+## Acknowledgments
+
+Built with:
+
+- [NestJS](https://nestjs.com/) - Progressive Node.js framework
+- [Vite](https://vitejs.dev/) - Next generation frontend tooling
+- [React](https://react.dev/) - Library for building user interfaces
 
 ---
 
 <div align="center">
-  <p><strong>Made with ❤️ by the NIST community</strong></p>
-  <p>
-    ⭐ Star us on <a href="https://github.com/ohanronnie/nist-stack">GitHub</a> if you find this useful!
-  </p>
-  <p>
-    <sub>Version 1.0.0 • See <a href="https://github.com/ohanronnie/nist-stack/blob/main/CHANGELOG.md">CHANGELOG</a> for release history</sub>
-  </p>
+  <p>Made with ❤️ by the NIST community</p>
+  <p>⭐ Star us on GitHub if you find this useful!</p>
 </div>

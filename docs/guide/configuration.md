@@ -411,6 +411,66 @@ await app.listen(port);
 console.log(`Server running on port ${port}`);
 ```
 
+## TypeScript Configuration
+
+### Required tsconfig.json Settings
+
+Ensure your `tsconfig.json` has these React and decorator settings:
+
+```json
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "esModuleInterop": true
+  }
+}
+```
+
+### Production Build Configuration
+
+**Critical:** If you use `tsconfig.build.json` for builds, include `.tsx` files:
+
+```json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationMap": true
+  },
+  "include": ["src/**/*", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
+}
+```
+
+**Why this separation matters:**
+
+✅ **Production (`tsconfig.build.json`):**
+
+- Include `"src/**/*.tsx"` to compile page/layout files
+- Used by: `npm run build` or `nest build`
+- Without this, you get "Cannot find module" errors in production
+
+❌ **Development (`nest start --watch`):**
+
+- Should NOT compile `.tsx` files
+- Vite handles all React/JSX compilation with HMR
+- Compiling `.tsx` with NestJS breaks hot reload
+- Only `.ts` controller/service files should be watched by NestJS
+
+### Verify Your Build
+
+Check that `.tsx` files are being compiled:
+
+```bash
+npm run build
+ls -la dist/  # Should contain compiled .js files for your pages
+```
+
 ## Next Steps
 
 - [Pages & Routing](/features/pages) - Build your first page

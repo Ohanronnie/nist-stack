@@ -231,9 +231,9 @@ The `createConfig` helper from NIST automatically sets up:
 - Custom app type
 - Optimized SSR settings
 
-### Step 10: Update `tsconfig.json`
+### Step 10: Update TypeScript Configuration
 
-Update your `tsconfig.json`:
+Update your `tsconfig.json` to support React and decorators:
 
 ```json
 {
@@ -260,6 +260,44 @@ Update your `tsconfig.json`:
   }
 }
 ```
+
+**Important for Production Builds:**
+
+If you use `tsconfig.build.json` for production builds, you need **two separate configs**:
+
+**1. `tsconfig.json`** (for development, used by your IDE):
+
+```json
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+    // ... other options
+  },
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+**2. `tsconfig.build.json`** (for production builds only):
+
+```json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "declaration": true
+  },
+  "include": ["src/**/*", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
+}
+```
+
+**Critical Notes:**
+
+- ✅ **Production:** Add `"src/**/*.tsx"` to `tsconfig.build.json` so pages/layouts compile
+- ❌ **Development:** Do NOT compile `.tsx` files with `nest start --watch` - this breaks Vite HMR
+- Vite handles all `.tsx` compilation during development
+- Only NestJS TypeScript files (`.ts`) should be watched by NestJS in dev mode
 
 ## Run Your App
 

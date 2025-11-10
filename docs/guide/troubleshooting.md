@@ -48,6 +48,32 @@ npm install @nestjs/common @nestjs/core @nestjs/platform-express react react-dom
 Required versions:
 
 - `@nestjs/common`: ^11.0.0
+
+### TypeScript not compiling .tsx files
+
+**Problem:** Production build fails or page files are not compiled.
+
+**Solution:** Ensure your `tsconfig.build.json` (or build config) includes `.tsx` files:
+
+```json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "declaration": true
+  },
+  "include": ["src/**/*", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts"]
+}
+```
+
+**Key points:**
+
+- Add `"src/**/*.tsx"` to the `include` array in `tsconfig.build.json` (production builds ONLY)
+- This ensures page and layout files are compiled during production build
+- Without this, you'll get "Cannot find module" errors in production
+- ⚠️ **Do NOT** compile `.tsx` files during development (`nest start --watch`) - this breaks Vite HMR
+- In dev mode, Vite handles all `.tsx` compilation with instant hot reload
 - `@nestjs/core`: ^11.0.0
 - `react`: ^19.0.0
 - `react-dom`: ^19.0.0
