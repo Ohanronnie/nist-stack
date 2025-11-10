@@ -277,9 +277,51 @@ npm run start:prod
 
 The framework automatically switches between dev (HMR) and production (static bundles) based on `NODE_ENV`.
 
-## TypeScript
+## TypeScript Configuration
 
 Full TypeScript support out of the box. All exports are typed.
+
+### Development vs Production Configuration
+
+NIST requires **two separate TypeScript configs** to prevent conflicts between NestJS compilation and Vite HMR:
+
+**1. `tsconfig.build.json`** (for development - excludes `.tsx`):
+
+```json
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "test",
+    "dist",
+    "**/*spec.ts",
+    "public",
+    "**/*.tsx"
+  ]
+}
+```
+
+**2. `tsconfig.prod.json`** (for production builds - includes `.tsx`):
+
+```json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "declaration": true
+  },
+  "include": ["src/**/*", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
+}
+```
+
+**Key points:**
+
+- ✅ **`tsconfig.build.json`** excludes `**/*.tsx` - prevents `nest start --watch` from compiling React files
+- ✅ **`tsconfig.prod.json`** includes `"src/**/*.tsx"` - compiles pages/layouts for production
+- ✅ **Development:** Vite handles all `.tsx` compilation with HMR
+- ✅ **Production:** TypeScript compiles `.tsx` files to JavaScript
+- ⚠️ Without the exclude in build config, NestJS will try to compile `.tsx` files and break HMR
 
 ## License
 
@@ -294,12 +336,6 @@ MIT
 - 📊 **Data-intensive apps** with significant server-side logic
 - 🚀 **Performance-critical** applications needing fast SSR
 - 🧩 **Microservices** architectures wanting consistent frontend
-
-**Consider alternatives if:**
-
-- You only need static site generation (use Astro, VitePress)
-- You want edge-first rendering (use Next.js with Vercel Edge)
-- You're building a simple blog (use WordPress, Ghost)
 
 ---
 
@@ -347,9 +383,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for release notes and version history.
 
 ## License
 
-MIT © [Your Name]
-
-See [LICENSE](./LICENSE) for details.
+MIT
 
 ---
 

@@ -413,9 +413,27 @@ Ensure your `tsconfig.json` has these React and decorator settings:
 }
 ```
 
-### Production Build Configuration
+### TypeScript Configuration
 
-**Critical:** If you use `tsconfig.build.json` for builds, include `.tsx` files:
+**Critical:** Use separate configs for development vs production to prevent NestJS from compiling `.tsx` files:
+
+**For Development (`tsconfig.build.json`):**
+
+```json
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "test",
+    "dist",
+    "**/*spec.ts",
+    "public",
+    "**/*.tsx"
+  ]
+}
+```
+
+**For Production (`tsconfig.prod.json`):**
 
 ```json
 {
@@ -432,18 +450,17 @@ Ensure your `tsconfig.json` has these React and decorator settings:
 
 **Why this separation matters:**
 
-✅ **Production (`tsconfig.build.json`):**
+✅ **Development (`tsconfig.build.json`):**
 
-- Include `"src/**/*.tsx"` to compile page/layout files
+- Excludes `**/*.tsx` to prevent NestJS from compiling React files
+- Vite handles all React/JSX compilation with HMR
+- Only `.ts` controller/service files are watched by NestJS
+
+✅ **Production (`tsconfig.prod.json`):**
+
+- Includes `"src/**/*.tsx"` to compile page/layout files
 - Used by: `npm run build` or `nest build`
 - Without this, you get "Cannot find module" errors in production
-
-❌ **Development (`nest start --watch`):**
-
-- Should NOT compile `.tsx` files
-- Vite handles all React/JSX compilation with HMR
-- Compiling `.tsx` with NestJS breaks hot reload
-- Only `.ts` controller/service files should be watched by NestJS
 
 ### Verify Your Build
 
