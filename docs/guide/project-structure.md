@@ -92,22 +92,13 @@ export class UsersController {
 ```typescript
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import {
-  createViteDevServer,
-  RedirectExceptionFilter,
-  NistInterceptor,
-} from "nist-stack";
-import { Reflector } from "@nestjs/core";
+import { bootstrapNist } from "nist-stack";
 
 async function bootstrap() {
-  const vite = await createViteDevServer();
   const app = await NestFactory.create(AppModule);
 
-  app.use(vite.dev.middlewares);
-
-  const reflector = app.get(Reflector);
-  app.useGlobalFilters(new RedirectExceptionFilter());
-  app.useGlobalInterceptors(new NistInterceptor(reflector, vite));
+  // One line to setup SSR
+  await bootstrapNist(app);
 
   await app.listen(3000);
 }

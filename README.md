@@ -79,17 +79,13 @@ That's it! One package gives you everything.
 
 ```typescript
 import { NestFactory } from "@nestjs/core";
-import { createViteDevServer, NistInterceptor } from "nist-stack";
-import { Reflector } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { bootstrapNist } from "nist-stack";
 
 async function bootstrap() {
-  const vite = await createViteDevServer();
   const app = await NestFactory.create(AppModule);
 
-  app.use(vite.dev.middlewares);
-
-  const reflector = app.get(Reflector);
-  app.useGlobalInterceptors(new NistInterceptor(reflector, vite));
+  await bootstrapNist(app); // One line setup!
 
   await app.listen(3000);
 }
@@ -368,6 +364,6 @@ Built with:
 ---
 
 <div align="center">
-  <p>Made with ❤️ by the NIST community</p>
-  <p>⭐ Star us on GitHub if you find this useful!</p>
+  <p><strong>Built with ❤️ by Ronnie</strong></p>
+  <p>⭐ Star us on <a href="https://github.com/ohanronnie/nist-stack">GitHub</a> if you find this useful!</p>
 </div>

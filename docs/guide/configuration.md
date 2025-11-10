@@ -79,27 +79,13 @@ export default createConfig({
 ```typescript
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import {
-  createViteDevServer,
-  RedirectExceptionFilter,
-  NistInterceptor,
-} from "nist-stack";
-import { Reflector } from "@nestjs/core";
+import { bootstrapNist } from "nist-stack";
 
 async function bootstrap() {
-  // Create Vite server
-  const vite = await createViteDevServer();
-
-  // Create NestJS app
   const app = await NestFactory.create(AppModule);
 
-  // Add Vite middleware
-  app.use(vite.dev.middlewares);
-
-  // Configure NIST
-  const reflector = app.get(Reflector);
-  app.useGlobalFilters(new RedirectExceptionFilter());
-  app.useGlobalInterceptors(new NistInterceptor(reflector, vite));
+  // Setup NIST SSR in one line
+  await bootstrapNist(app);
 
   await app.listen(3000);
 }
@@ -108,35 +94,18 @@ bootstrap();
 
 ### Production vs Development
 
+`bootstrapNist` automatically handles both environments:
+
 ```typescript
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import {
-  createViteDevServer,
-  RedirectExceptionFilter,
-  NistInterceptor,
-} from "nist-stack";
-import { Reflector } from "@nestjs/core";
+import { bootstrapNist } from "nist-stack";
 
 async function bootstrap() {
-  const isDev = process.env.NODE_ENV !== "production";
-
-  // Only use Vite in development
-  let vite;
-  if (isDev) {
-    vite = await createViteDevServer();
-  }
-
   const app = await NestFactory.create(AppModule);
 
-  // Add middleware only in dev
-  if (isDev && vite) {
-    app.use(vite.dev.middlewares);
-  }
-
-  const reflector = app.get(Reflector);
-  app.useGlobalFilters(new RedirectExceptionFilter());
-  app.useGlobalInterceptors(new NistInterceptor(reflector, vite));
+  // Automatically detects NODE_ENV and configures accordingly
+  await bootstrapNist(app);
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
@@ -145,6 +114,20 @@ async function bootstrap() {
 }
 bootstrap();
 ```
+
+**What `bootstrapNist` does based on NODE_ENV:**
+
+**Development (`NODE_ENV !== 'production'`):**
+
+- Creates Vite dev server with HMR
+- Mounts Vite middleware for instant hot reload
+- Removes CSP headers for dev tools
+
+**Production (`NODE_ENV === 'production'`):**
+
+- Serves pre-built assets from `dist/client/`
+- Sets long-term caching headers (1 year for assets)
+- No Vite dev server overhead
 
 ## Entry Client Configuration
 
