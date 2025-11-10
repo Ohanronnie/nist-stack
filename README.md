@@ -342,11 +342,11 @@ MIT
 ## Documentation
 
 - 📚 [Full Documentation](https://github.com/ohanronnie/nist-stack/tree/main/docs)
-- 🚀 [Getting Started Guide](./docs/guide/getting-started.md)
-- 📖 [API Reference](./docs/api/decorators.md)
-- 🎯 [Examples](./docs/examples)
-- 🔧 [Configuration](./docs/guide/configuration.md)
-- 🚢 [Deployment Guide](./docs/advanced/deployment.md)
+- 🚀 [Getting Started Guide](https://github.com/ohanronnie/nist-stack/blob/main/docs/guide/getting-started.md)
+- 📖 [API Reference](https://github.com/ohanronnie/nist-stack/blob/main/docs/api/decorators.md)
+- 🎯 [Examples](https://github.com/ohanronnie/nist-stack/tree/main/docs/examples)
+- 🔧 [Configuration](https://github.com/ohanronnie/nist-stack/blob/main/docs/guide/configuration.md)
+- 🚢 [Deployment Guide](https://github.com/ohanronnie/nist-stack/blob/main/docs/advanced/deployment.md)
 
 ---
 
@@ -361,7 +361,7 @@ MIT
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
+We welcome contributions! Please see our [Contributing Guide](https://github.com/ohanronnie/nist-stack/blob/main/CONTRIBUTING.md) for details.
 
 - 🐛 [Report a bug](https://github.com/ohanronnie/nist-stack/issues/new?template=bug_report.md)
 - ✨ [Request a feature](https://github.com/ohanronnie/nist-stack/issues/new?template=feature_request.md)
@@ -371,13 +371,13 @@ We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md)
 
 ## Security
 
-Found a security vulnerability? Please review our [Security Policy](./SECURITY.md) and report it responsibly.
+Found a security vulnerability? Please review our [Security Policy](https://github.com/ohanronnie/nist-stack/blob/main/SECURITY.md) and report it responsibly.
 
 ---
 
 ## Changelog
 
-See [CHANGELOG.md](./CHANGELOG.md) for release notes and version history.
+See [CHANGELOG.md](https://github.com/ohanronnie/nist-stack/blob/main/CHANGELOG.md) for release notes and version history.
 
 ---
 
