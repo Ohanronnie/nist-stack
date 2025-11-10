@@ -250,6 +250,53 @@ ls -la dist/client/
 
 ## SSR & Hydration Issues
 
+### App doesn't hydrate / React not interactive
+
+**Problem:** Your app renders but clicks don't work, or you see "React is not defined" errors.
+
+**Cause:** Missing `hydrationScripts` in your layout.
+
+**Solution:** Ensure your root layout includes the required props:
+
+```tsx
+// src/app.layout.tsx
+import type { LayoutProps } from "nist-stack/client";
+
+export default function AppLayout({
+  children,
+  metaTags, // ✅ REQUIRED
+  hydrationScripts, // ✅ REQUIRED
+  metadata,
+}: LayoutProps) {
+  const isClient = typeof window !== "undefined";
+
+  if (isClient) {
+    return <>{children}</>;
+  }
+
+  return (
+    <html lang="en">
+      <head>
+        <meta charSet="UTF-8" />
+        <title>{metadata?.title || "My App"}</title>
+        {metaTags} {/* ✅ Must be in <head> for SEO */}
+      </head>
+      <body>
+        <div id="root">{children}</div>
+        {hydrationScripts} {/* ✅ Must be before </body> for hydration */}
+      </body>
+    </html>
+  );
+}
+```
+
+**What these do:**
+
+- `{metaTags}` - Injects SEO meta tags from your controller's metadata
+- `{hydrationScripts}` - Injects React client bundle for interactivity
+
+Without these, your app will be static HTML only!
+
 ### Hydration mismatch errors
 
 **Problem:** React shows "Hydration failed" warnings.

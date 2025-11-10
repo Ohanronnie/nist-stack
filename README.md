@@ -109,9 +109,39 @@ export class AppController {
 }
 ```
 
-### 3. Create a React Page (src/pages/app.page.tsx)
+### 3. Create Root Layout (src/app.layout.tsx)
 
-```typescript
+```tsx
+import type { LayoutProps } from "nist-stack/client";
+
+export default function AppLayout({
+  children,
+  metaTags, // Required for SEO
+  hydrationScripts, // Required for React hydration
+  metadata,
+}: LayoutProps) {
+  const isClient = typeof window !== "undefined";
+  if (isClient) return <>{children}</>;
+
+  return (
+    <html lang="en">
+      <head>
+        <meta charSet="UTF-8" />
+        <title>{metadata?.title || "My App"}</title>
+        {metaTags}
+      </head>
+      <body>
+        <div id="root">{children}</div>
+        {hydrationScripts}
+      </body>
+    </html>
+  );
+}
+```
+
+### 4. Create a React Page (src/app.page.tsx)
+
+```tsx
 import { Link } from "nist-stack/client";
 
 export default function App({ users }) {

@@ -196,16 +196,22 @@ export default function AppLayout({
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{title}</title>
-        {metaTags}
+        {metaTags} {/* REQUIRED: Injects SEO meta tags from controller */}
       </head>
       <body>
         <div id="root">{children}</div>
-        {hydrationScripts}
+        {hydrationScripts} {/* REQUIRED: Enables React hydration */}
       </body>
     </html>
   );
 }
 ```
+
+> **⚠️ Critical Props:**
+>
+> - `{metaTags}` - Must be in `<head>` for SEO and dynamic metadata to work
+> - `{hydrationScripts}` - Must be before `</body>` for client-side React to work
+> - Without these, your app won't hydrate properly and SEO will break!
 
 ### Step 9: Create Vite Config
 
