@@ -53,25 +53,7 @@ Required versions:
 
 **Problem:** Production build fails or page files are not compiled.
 
-**Solution:** Create separate TypeScript configs for development vs production:
-
-**1. `tsconfig.build.json`** (for development - excludes `.tsx`):
-
-```json
-{
-  "extends": "./tsconfig.json",
-  "exclude": [
-    "node_modules",
-    "test",
-    "dist",
-    "**/*spec.ts",
-    "public",
-    "**/*.tsx"
-  ]
-}
-```
-
-**2. `tsconfig.prod.json`** (for production - includes `.tsx`):
+**Solution:** Ensure your `tsconfig.build.json` (or build config) includes `.tsx` files:
 
 ```json
 {
@@ -87,10 +69,11 @@ Required versions:
 
 **Key points:**
 
-- ✅ **`tsconfig.build.json`** excludes `**/*.tsx` to prevent `nest start --watch` from compiling React files
-- ✅ **`tsconfig.prod.json`** includes `"src/**/*.tsx"` for production builds
-- ⚠️ Without excluding `.tsx` in development, NestJS will try to compile them and break Vite HMR
-- In development, Vite handles all `.tsx` compilation with instant hot reload
+- Add `"src/**/*.tsx"` to the `include` array in `tsconfig.build.json` (production builds ONLY)
+- This ensures page and layout files are compiled during production build
+- Without this, you'll get "Cannot find module" errors in production
+- ⚠️ **Do NOT** compile `.tsx` files during development (`nest start --watch`) - this breaks Vite HMR
+- In dev mode, Vite handles all `.tsx` compilation with instant hot reload
 - `@nestjs/core`: ^11.0.0
 - `react`: ^19.0.0
 - `react-dom`: ^19.0.0
