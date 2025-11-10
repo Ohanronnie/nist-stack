@@ -441,47 +441,44 @@ NODE_ENV=production npm run start:prod
 - 🧩 **Microservices** - Want consistent frontend across services
 - 🔧 **Existing NestJS Apps** - Add SSR to your current backend
 
-### ⚠️ Consider Alternatives If
-
-- **Static site only** → Use Astro or VitePress
-- **Edge-first rendering** → Use Next.js with Vercel Edge
-- **Simple blog/CMS** → Use WordPress or Ghost
-- **No backend logic** → Use Vite SPA mode
+---
 
 ## 📚 Documentation
 
+📖 **[Read the full documentation on GitHub →](https://github.com/ohanronnie/nist-stack/tree/main/docs)**
+
 ### 🚀 Getting Started
 
-- **[Installation Guide](./docs/guide/installation.md)** - Setup NIST in minutes
-- **[Getting Started](./docs/guide/getting-started.md)** - Your first NIST app
-- **[Project Structure](./docs/guide/project-structure.md)** - Understand the layout
-- **[Configuration](./docs/guide/configuration.md)** - Customize your setup
+- **[Installation Guide](https://github.com/ohanronnie/nist-stack/blob/main/docs/guide/installation.md)** - Setup NIST in minutes
+- **[Getting Started](https://github.com/ohanronnie/nist-stack/blob/main/docs/guide/getting-started.md)** - Your first NIST app
+- **[Project Structure](https://github.com/ohanronnie/nist-stack/blob/main/docs/guide/project-structure.md)** - Understand the layout
+- **[Configuration](https://github.com/ohanronnie/nist-stack/blob/main/docs/guide/configuration.md)** - Customize your setup
 
 ### 📖 Core Concepts
 
-- **[Pages](./docs/features/pages.md)** - Creating and rendering pages
-- **[Layouts](./docs/features/layouts.md)** - Shared layouts and nesting
-- **[Data Fetching](./docs/features/data-fetching.md)** - Server-side data loading
-- **[Client-Side Features](./docs/features/client-side.md)** - Navigation, hooks, and components
-- **[Metadata & SEO](./docs/features/metadata.md)** - Dynamic meta tags
-- **[Guards & Auth](./docs/features/guards.md)** - Authentication patterns
-- **[Error Handling](./docs/features/error-handling.md)** - Graceful error management
-- **[Request Context](./docs/features/request-context.md)** - Accessing request data
+- **[Pages](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/pages.md)** - Creating and rendering pages
+- **[Layouts](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/layouts.md)** - Shared layouts and nesting
+- **[Data Fetching](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/data-fetching.md)** - Server-side data loading
+- **[Client-Side Features](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/client-side.md)** - Navigation, hooks, and components
+- **[Metadata & SEO](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/metadata.md)** - Dynamic meta tags
+- **[Guards & Auth](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/guards.md)** - Authentication patterns
+- **[Error Handling](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/error-handling.md)** - Graceful error management
+- **[Request Context](https://github.com/ohanronnie/nist-stack/blob/main/docs/features/request-context.md)** - Accessing request data
 
 ### 🔧 Advanced Topics
 
-- **[Existing Project Integration](./docs/advanced/existing-project.md)** - Add NIST to your NestJS app
-- **[Deployment](./docs/advanced/deployment.md)** - Production deployment guide
-- **[Performance](./docs/advanced/performance.md)** - Optimization techniques
-- **[Testing](./docs/advanced/testing.md)** - Unit and E2E testing
-- **[Monitoring](./docs/advanced/monitoring.md)** - Health checks and metrics
+- **[Existing Project Integration](https://github.com/ohanronnie/nist-stack/blob/main/docs/advanced/existing-project.md)** - Add NIST to your NestJS app
+- **[Deployment](https://github.com/ohanronnie/nist-stack/blob/main/docs/advanced/deployment.md)** - Production deployment guide
+- **[Performance](https://github.com/ohanronnie/nist-stack/blob/main/docs/advanced/performance.md)** - Optimization techniques
+- **[Testing](https://github.com/ohanronnie/nist-stack/blob/main/docs/advanced/testing.md)** - Unit and E2E testing
+- **[Monitoring](https://github.com/ohanronnie/nist-stack/blob/main/docs/advanced/monitoring.md)** - Health checks and metrics
 
 ### 📋 Reference
 
-- **[API - Decorators](./docs/api/decorators.md)** - Complete decorator reference
-- **[API - Types](./docs/api/types.md)** - TypeScript type definitions
-- **[FAQ](./docs/guide/faq.md)** - Frequently asked questions
-- **[Troubleshooting](./docs/guide/troubleshooting.md)** - Common issues and solutions
+- **[API - Decorators](https://github.com/ohanronnie/nist-stack/blob/main/docs/api/decorators.md)** - Complete decorator reference
+- **[API - Types](https://github.com/ohanronnie/nist-stack/blob/main/docs/api/types.md)** - TypeScript type definitions
+- **[FAQ](https://github.com/ohanronnie/nist-stack/blob/main/docs/guide/faq.md)** - Frequently asked questions
+- **[Troubleshooting](https://github.com/ohanronnie/nist-stack/blob/main/docs/guide/troubleshooting.md)** - Common issues and solutions
 
 ---
 
@@ -504,14 +501,14 @@ NODE_ENV=production npm run start:prod
       </a>
     </td>
     <td align="center">
-      <a href="./CONTRIBUTING.md">
+      <a href="https://github.com/ohanronnie/nist-stack/blob/main/CONTRIBUTING.md">
         <br>🤝<br>
         <strong>Contributing</strong>
         <br><sub>Help improve NIST</sub>
       </a>
     </td>
     <td align="center">
-      <a href="./SECURITY.md">
+      <a href="https://github.com/ohanronnie/nist-stack/blob/main/SECURITY.md">
         <br>🛡️<br>
         <strong>Security</strong>
         <br><sub>Report vulnerabilities</sub>
@@ -526,7 +523,7 @@ NODE_ENV=production npm run start:prod
 
 MIT © NIST Stack
 
-See [LICENSE](./LICENSE) for details.
+See [LICENSE](https://github.com/ohanronnie/nist-stack/blob/main/LICENSE) for details.
 
 ---
 
@@ -548,6 +545,6 @@ Special thanks to all our [contributors](https://github.com/ohanronnie/nist-stac
     ⭐ Star us on <a href="https://github.com/ohanronnie/nist-stack">GitHub</a> if you find this useful!
   </p>
   <p>
-    <sub>Version 1.0.0 • See <a href="./CHANGELOG.md">CHANGELOG</a> for release history</sub>
+    <sub>Version 1.0.0 • See <a href="https://github.com/ohanronnie/nist-stack/blob/main/CHANGELOG.md">CHANGELOG</a> for release history</sub>
   </p>
 </div>

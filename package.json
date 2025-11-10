@@ -1,6 +1,6 @@
 {
   "name": "nist-stack",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "NIST Framework - NestJS + Vite SSR for React",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
