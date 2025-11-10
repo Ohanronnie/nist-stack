@@ -69,33 +69,35 @@ getAbout() {
 }
 ```
 
-### Nested Pages
+### Organized File Structure
 
-For organized file structure:
+Group related pages with their controller using `@PageRoot(__dirname)`:
 
 ```typescript
-// src/pages/pages.controller.ts
-@PageRoot(__dirname)
-@Controller()
-export class PagesController {
-  @Get("about")
-  @Page("about") // → looks for about.page.tsx in same directory
-  getAbout() {}
+// src/blog/blog.controller.ts
+@PageRoot(__dirname) // Pages are resolved relative to this directory
+@Controller("blog")
+export class BlogController {
+  @Get("post")
+  @Page("post") // → looks for post.page.tsx in src/blog/
+  getPost() {}
 
-  @Get("contact")
-  @Page("contact") // → looks for contact.page.tsx
-  getContact() {}
+  @Get("archive")
+  @Page("archive") // → looks for archive.page.tsx in src/blog/
+  getArchive() {}
 }
 ```
 
 File structure:
 
 ```
-src/pages/
-├── pages.controller.ts
-├── about.page.tsx
-└── contact.page.tsx
+src/blog/
+├── blog.controller.ts
+├── post.page.tsx      ← @Page('post') resolves here
+└── archive.page.tsx   ← @Page('archive') resolves here
 ```
+
+**Key Point:** `@PageRoot(__dirname)` makes NIST resolve pages relative to the controller's directory, not from a global `src/pages/` folder.
 
 ## Return Data
 

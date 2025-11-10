@@ -127,7 +127,7 @@ export class AppController {
 }
 ```
 
-### 4. Create Your React Page (`src/pages/home.page.tsx`)
+### 4. Create Your React Page (e.g., `src/home.page.tsx`)
 
 ```tsx
 import { Link } from "nist-stack/client";
@@ -146,6 +146,8 @@ export default function Home({ users }) {
   );
 }
 ```
+
+> **Note:** Pages are resolved relative to `__dirname` of the controller with `@PageRoot(__dirname)`. If your controller is in `src/app.controller.ts`, place `home.page.tsx` in the same `src/` directory.
 
 ### 5. Run Your App
 

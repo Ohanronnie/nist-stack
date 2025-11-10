@@ -27,22 +27,34 @@ NIST uses specific file naming patterns:
 
 ### Page Files: `*.page.tsx`
 
-Page components that get server-side rendered:
+Page components that get server-side rendered. **Pages are resolved relative to the controller's `@PageRoot(__dirname)`:**
 
 ```
+// Controller in src/app.controller.ts with @PageRoot(__dirname)
 src/home.page.tsx           → @Page('home')
-src/pages/about.page.tsx    → @Page('pages/about')
-src/users/profile.page.tsx  → @Page('users/profile')
+src/about.page.tsx          → @Page('about')
+
+// Controller in src/blog/blog.controller.ts with @PageRoot(__dirname)
+src/blog/post.page.tsx      → @Page('post')
+src/blog/archive.page.tsx   → @Page('archive')
+
+// Controller in src/users/users.controller.ts with @PageRoot(__dirname)
+src/users/profile.page.tsx  → @Page('profile')
 ```
 
 ### Layout Files: `*.layout.tsx`
 
-Layout components that wrap pages:
+Layout components that wrap pages, also resolved relative to `@PageRoot(__dirname)`:
 
 ```
+// Controller in src/ with @PageRoot(__dirname)
 src/app.layout.tsx          → Root layout (wraps all pages)
-src/pages/pages.layout.tsx  → Wraps /pages/* routes
-src/users/users.layout.tsx  → Wraps /users/* routes
+
+// Controller in src/blog/ with @PageRoot(__dirname)
+src/blog/blog.layout.tsx    → @Layout('blog')
+
+// Controller in src/users/ with @PageRoot(__dirname)
+src/users/users.layout.tsx  → @Layout('users')
 ```
 
 ## Controllers
@@ -174,10 +186,10 @@ export default function AppLayout({
 
 ### Nested Layout (Optional)
 
-Create layouts for specific sections:
+Create layouts for specific sections. Example with a controller in `src/blog/`:
 
 ```tsx
-// src/pages/pages.layout.tsx
+// src/blog/blog.layout.tsx (controller in src/blog/blog.controller.ts)
 import type { LayoutProps } from "nist-stack/client";
 
 export default function PagesLayout({ children }: LayoutProps) {

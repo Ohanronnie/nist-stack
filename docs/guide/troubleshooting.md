@@ -281,8 +281,7 @@ export default function Page({ timestamp }) {
 
 ```bash
 ls -la src/home.page.tsx
-# or
-ls -la src/pages/home.page.tsx
+# Pages are relative to @PageRoot(__dirname), not a fixed src/pages/ folder
 ```
 
 2. **Verify @PageRoot points to correct directory:**

@@ -32,13 +32,14 @@ export class AppController {
 }
 ```
 
-The above will render `home.page.tsx` from the `pages/` directory.
+The above will render `home.page.tsx` from the directory specified by `@PageRoot(__dirname)`.
 
 **Important:**
 
 - Must be used with `@PageRoot()` decorator
 - Must be combined with a routing decorator (`@Get`, `@Post`, etc.)
 - Page file must export a default React component
+- Pages are resolved **relative to the controller's directory**, NOT from a global `src/pages/` folder
 
 ---
 
@@ -59,19 +60,48 @@ Specifies the root directory for page components relative to the controller file
 **Example:**
 
 ```typescript
+// src/blog/blog.controller.ts
 @Controller("blog")
-@PageRoot(__dirname)
+@PageRoot(__dirname) // Sets root to src/blog/
 export class BlogController {
-  // Pages will be loaded from:
-  // - __dirname/pages/*.page.tsx
-  // - __dirname/*.page.tsx (if no pages/ directory)
+  @Get("post")
+  @Page("post") // → Looks for src/blog/post.page.tsx
+  getPost() {
+    return { data: {} };
+  }
+
+  @Get("archive")
+  @Page("archive") // → Looks for src/blog/archive.page.tsx
+  getArchive() {
+    return { data: {} };
+  }
 }
 ```
 
-**Directory Resolution:**
+**File Structure:**
 
-1. First checks `{sourcePath}/pages/*.page.tsx`
-2. Falls back to `{sourcePath}/*.page.tsx`
+```
+src/blog/
+├── blog.controller.ts
+├── post.page.tsx      ← @Page('post')
+└── archive.page.tsx   ← @Page('archive')
+```
+
+**Key Concept:**
+
+`@PageRoot(__dirname)` makes NIST resolve page files **relative to the controller's directory**. This allows you to organize pages alongside their controllers instead of in a global folder.
+
+**Common Pattern:**
+
+```typescript
+// src/app.controller.ts with @PageRoot(__dirname)
+src/home.page.tsx           → @Page('home')
+src/about.page.tsx          → @Page('about')
+
+// src/blog/blog.controller.ts with @PageRoot(__dirname)
+src/blog/post.page.tsx      → @Page('post')
+src/blog/archive.page.tsx   → @Page('archive')
+```
 
 ---
 

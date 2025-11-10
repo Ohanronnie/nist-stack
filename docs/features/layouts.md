@@ -102,29 +102,43 @@ export default function AppLayout({
 
 ## Nested Layouts
 
-Create layouts for specific page sections.
+Create layouts for specific page sections. Layouts are resolved relative to the controller's `@PageRoot(__dirname)`.
 
 ### Creating a Nested Layout
 
+Example with controller in `src/blog/blog.controller.ts`:
+
+```typescript
+// src/blog/blog.controller.ts
+@PageRoot(__dirname)
+@Controller("blog")
+export class BlogController {
+  @Get("post")
+  @Page("post")
+  @Layout("blog") // Looks for src/blog/blog.layout.tsx
+  getPost() {}
+}
 ```
-src/pages/
-├── pages.layout.tsx  ← Nested layout
-├── about.page.tsx
-└── contact.page.tsx
+
+```
+src/blog/
+├── blog.controller.ts
+├── blog.layout.tsx   ← Nested layout
+├── post.page.tsx
+└── archive.page.tsx
 ```
 
 ```tsx
-// src/pages/pages.layout.tsx
+// src/blog/blog.layout.tsx
 import type { LayoutProps } from "nist-stack/client";
 
-export default function PagesLayout({ children }: LayoutProps) {
+export default function BlogLayout({ children }: LayoutProps) {
   return (
-    <div className="pages-wrapper">
+    <div className="blog-wrapper">
       <aside className="sidebar">
         <nav>
-          <a href="/pages/about">About</a>
-          <a href="/pages/contact">Contact</a>
-          <a href="/pages/team">Team</a>
+          <a href="/blog/post">Latest Post</a>
+          <a href="/blog/archive">Archive</a>
         </nav>
       </aside>
       <div className="content">{children}</div>
