@@ -159,6 +159,64 @@ export default function App({ users }) {
 }
 ```
 
+### 5. Create the Vite client entry (src/entry-client.tsx)
+
+```tsx
+import "./globals.css";
+import { createClientEntry } from "nist-stack/client";
+
+const globals = window as any;
+
+// Discover all pages and layouts relative to @PageRoot(__dirname)
+// @ts-ignore - Vite-specific import.meta.glob helper
+const pages = import.meta.glob(["/src/**/*.page.tsx", "/app/**/*.page.tsx"], {
+  eager: false,
+});
+
+// @ts-ignore - Vite-specific import.meta.glob helper
+const layouts = import.meta.glob(
+  ["/src/**/*.layout.tsx", "/app/**/*.layout.tsx"],
+  { eager: false }
+);
+
+const { render } = createClientEntry({
+  globals,
+  pages,
+  layouts,
+  targetId: "root",
+});
+
+render();
+
+// Enable hot module replacement during development
+// @ts-ignore - Vite HMR typings
+if (import.meta.hot) {
+  // @ts-ignore - Vite HMR typings
+  import.meta.hot.accept(Object.keys(pages), async () => {
+    await render();
+  });
+}
+```
+
+> ✅ The client entry wires Vite + React hydration. Keep it at `src/entry-client.tsx` so `bootstrapNist` can inject the scripts automatically.
+
+### 6. Configure Vite (vite.config.ts)
+
+```ts
+import { resolve } from "path";
+import { createConfig } from "nist-stack";
+
+export default createConfig({
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "./src"),
+    },
+  },
+});
+```
+
+> `createConfig()` sets up SSR + HMR defaults. Add aliases or plugins here as you would in a normal Vite project.
+
 ## Available Imports
 
 ### Server-Side
