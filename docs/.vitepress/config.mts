@@ -4,7 +4,7 @@ export default defineConfig({
   title: "NIST Framework",
   description:
     "Enterprise-grade full-stack SSR framework combining NestJS architecture with Vite performance. Build scalable, type-safe React applications with 19ms response times.",
-  base: "/nist-stack/",
+  base: "/",
   head: [
     ["meta", { name: "theme-color", content: "#646cff" }],
     ["meta", { name: "og:type", content: "website" }],
