@@ -581,6 +581,6 @@ export class AuthGuard implements CanActivate {
 
 ## Next Steps
 
-- [Middleware](/advanced/middleware) - NestJS middleware
-- [Custom Guards](/advanced/custom-guards) - Advanced patterns
-- [Authentication Example](/examples/authentication) - Full auth flow
+- [Error Handling](/features/error-handling) - Manage exceptions and redirects
+- [Client-Side Hooks](/features/client-side) - Handle navigation on the client
+- [Configuration Guide](/guide/configuration) - Tune Nest, Vite, and TypeScript

@@ -457,5 +457,5 @@ async getPost(@Param('slug') slug: string): Promise<PageResponse> {
 ## Next Steps
 
 - [Guards](/features/guards) - Protect routes
-- [SSR](/features/ssr) - How SSR works
+- [Project Structure](/guide/project-structure) - How SSR wiring works
 - [Performance](/advanced/performance) - Optimize metadata

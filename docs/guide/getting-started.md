@@ -317,7 +317,7 @@ npm run start:dev
 bun run start:dev
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) and you should see your app! 🎉
+Visit `http://localhost:3000` and you should see your app! 🎉
 
 ## What's Next?
 
@@ -349,5 +349,5 @@ Make sure `jsxImportSource` is set to `"react"` in `tsconfig.json`.
 Ensure your server and client render the same HTML. Avoid browser-specific code outside of `useEffect`.
 
 ::: tip Need Help?
-Check out the [Examples](/examples/basic-app) section for complete working applications!
+Check out the [Client-Side Hooks](/features/client-side) section for complete navigation patterns and examples.
 :::

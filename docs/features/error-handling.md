@@ -423,6 +423,6 @@ export class AuthGuard implements CanActivate {
 
 ## See Also
 
-- [Guards](/features/guards) - Authentication and authorization
-- [Redirects](/features/redirects) - Server-side redirect handling
+- [Guards & Redirects](/features/guards) - Authentication and authorization
+- [RedirectException API](/api/types#redirectexception) - Detailed redirect usage
 - [NestJS Exception Filters](https://docs.nestjs.com/exception-filters) - Official NestJS documentation

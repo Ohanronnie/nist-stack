@@ -289,4 +289,4 @@ The layout closest to the page will be used as the root layout.
 
 - [Dynamic Metadata](/features/metadata) - SEO and meta tags
 - [Guards](/features/guards) - Protect routes
-- [Client Routing](/features/client-routing) - Navigate between pages
+- [Client-Side Hooks](/features/client-side) - Navigate between pages

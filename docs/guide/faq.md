@@ -514,7 +514,7 @@ Follow [NestJS GraphQL docs](https://docs.nestjs.com/graphql/quick-start).
 
 ### How can I contribute?
 
-See our [Contributing Guide](../../CONTRIBUTING.md)!
+See our [Contributing Guide](https://github.com/ohanronnie/nist-stack/blob/main/CONTRIBUTING.md)!
 
 ### Is there commercial support available?
 
@@ -524,7 +524,7 @@ Enterprise support options are coming soon. Email [support@nist-stack.dev](mailt
 
 ## Didn't find your answer?
 
-- 📖 Check the [full documentation](../introduction.md)
+- 📖 Check the [full documentation](getting-started.md)
 - 🔍 [Search GitHub issues](https://github.com/ohanronnie/nist-stack/issues)
 - 💬 [Ask on GitHub Discussions](https://github.com/ohanronnie/nist-stack/discussions)
 - 🐛 [Report a bug](https://github.com/ohanronnie/nist-stack/issues/new)
